@@ -84,11 +84,12 @@
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      var testFail = [1, 1, 0, 0];
-      var testPass = [1, 0, 0, 0];
-      console.log(this.hasRowConflictAt(testFail));
-      console.log(this.hasRowConflictAt(testPass));
-
+      var currentRows = this.rows();
+      var hasConflict = false;
+      for (var i = 0; i < currentRows.length; i++) {
+        hasConflict = this.hasRowConflictAt(currentRows[i]);
+      };
+      return hasConflict;
     },
 
 
