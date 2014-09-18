@@ -16,32 +16,32 @@
 
 window.findNRooksSolution = function(n) {
   var solution = undefined; //fixme
-  // Start decision tree
-  var currentRow = [];
-  var idx = 0;
-  var board = [];
-  var buildLevel = function(){
-    idx = 0;
-    currentRow = [];
-    n = 3;
-    for (var i=0; i<n; i++){
-      if (i === idx){
-        currentRow.push(1);
-      } else {
-        currentRow.push(0);
-      }
-    }
-    board.push(currentRow);
 
-    console.log(board);
+  // generate possible rows
+
+  var generatePossRows = function() {
+    var containerArr = [];
+    var innerArr = [];
+
+    for (var i = 0; i < n; i++) {
+      for (var j = 0; j < n; j++) {
+        if (i === j) {
+          innerArr.push(1);
+        } else {
+          innerArr.push(0);
+        }
+      }
+      containerArr.push(innerArr);
+      innerArr = [];
+    }
+    return containerArr;
   };
-  //   First level  = Generate n starting boards in array with seq. placement of rook
-  //   Iterate over array of first level boards
-  //     Generate second level of n boards for each first level board
-  //     Repeat iteration of second level... --> n
-  //   When n = this.rows.length traverse each n-level (completed) board
-  //     Run col and row check for each board
-  //     Return first board to pass checks
+
+
+  // make 1st level possible rows
+  //   each of 1st levels --> nth level
+  //     make next level using recursion/possible rows
+
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   buildLevel();
   return solution;
