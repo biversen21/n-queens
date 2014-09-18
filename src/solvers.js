@@ -37,11 +37,32 @@ window.findNRooksSolution = function(n) {
     return containerArr;
   };
 
+  var possRows = generatePossRows();
+
+  // [[1,0,0],[0,1,0],[0,0,1]]
+
+  var boards = [];
+  var board = [];
+
+  var generateBoard = function() {
+    for(var i = 0; i < n; i++) {
+      board.push(possRows[i]);
+      if (board.length < n) {
+        generateBoard();
+      }
+      if (board.length === n) {
+        boards.push(board);
+        board = board.slice(0 ,n-1);
+      }
+    }
+    board.pop();
+  };
 
   // make 1st level possible rows
   //   each of 1st levels --> nth level
   //     make next level using recursion/possible rows
 
+  generateBoard();
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   buildLevel();
   return solution;
