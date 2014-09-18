@@ -15,14 +15,17 @@
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
 
 window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
+  var solution = undefined;
 
-  // generate possible rows
+  if (n === 1) {
+    solution = new Board([1]);
+  }
+  var boards = [];
+  var board = [];
 
   var generatePossRows = function() {
     var containerArr = [];
     var innerArr = [];
-
     for (var i = 0; i < n; i++) {
       for (var j = 0; j < n; j++) {
         if (i === j) {
@@ -37,12 +40,60 @@ window.findNRooksSolution = function(n) {
     return containerArr;
   };
 
+  var generateBoard = function() {
+    for(var i = 0; i < n; i++) {
+      board.push(possRows[i]);
+      if (board.length < n) {
+        generateBoard();
+      }
+      if (board.length === n) {
+        boards.push(board);
+        board = board.slice(0 ,n-1);
+      }
+    }
+    board.pop();
+    return boards;
+  };
+
   var possRows = generatePossRows();
+  var possBoards = generateBoard();
 
-  // [[1,0,0],[0,1,0],[0,0,1]]
+  var currentBoard;
+  for(var i = 0; i < possBoards.length; i++) {
+    currentBoard = new Board (possBoards[i]);
+    if (!currentBoard.hasAnyRooksConflicts()){
+      solution = possBoards[i];
+      break;
+    }
+  }
+  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+  return solution;
+};
 
+
+
+// return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
+window.countNRooksSolutions = function(n) {
+  var solutionCount = 0;
   var boards = [];
   var board = [];
+
+  var generatePossRows = function() {
+    var containerArr = [];
+    var innerArr = [];
+    for (var i = 0; i < n; i++) {
+      for (var j = 0; j < n; j++) {
+        if (i === j) {
+          innerArr.push(1);
+        } else {
+          innerArr.push(0);
+        }
+      }
+      containerArr.push(innerArr);
+      innerArr = [];
+    }
+    return containerArr;
+  };
 
   var generateBoard = function() {
     for(var i = 0; i < n; i++) {
@@ -56,23 +107,19 @@ window.findNRooksSolution = function(n) {
       }
     }
     board.pop();
+    return boards;
   };
 
-  // make 1st level possible rows
-  //   each of 1st levels --> nth level
-  //     make next level using recursion/possible rows
+  var possRows = generatePossRows();
+  var possBoards = generateBoard();
 
-  generateBoard();
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  buildLevel();
-  return solution;
-};
-
-
-
-// return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
-window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var currentBoard;
+  for(var i = 0; i < possBoards.length; i++) {
+    currentBoard = new Board (possBoards[i]);
+    if (!currentBoard.hasAnyRooksConflicts()){
+      solutionCount++;
+    }
+  }
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
