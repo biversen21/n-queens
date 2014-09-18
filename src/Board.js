@@ -181,9 +181,9 @@
       var i = minorDiagonalColumnIndexAtFirstRow;
       var rows = this.rows();
       var count = 0;
-      for (var row = rows.length; row > rows.length; row--) {
-        if(rows[row][row - i]) {
-          if(rows[row - i][row] === 1) {
+      for (var row = 0; row < rows.length; row++) {
+        if(rows[row][i - row]) {
+          if(rows[row][i - row] === 1) {
             count++;
             if (count > 1) {
               return true;
@@ -197,7 +197,7 @@
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
       var rowLength = this.rows().length * 2;
-      for (var i = rowLength; i >= 0; i--) {
+      for (var i = 0; i < rowLength; i++) {
         if (this.hasMinorDiagonalConflictAt(i)) {
           return true;
         }
